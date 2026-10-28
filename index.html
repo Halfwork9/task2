@@ -4,424 +4,639 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sakthi Dental Clinic | Specialized Dental Care in Hosur</title>
-    <!-- Fonts -->
+    
+    <!-- load google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    
+    <!-- fontawesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tailwind CSS -->
+    
+    <!-- tailwind setup -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // custom theme config for the clinic
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: { sans: ['Poppins', 'sans-serif'] },
                     colors: {
-                        primary: '#7c3aed', /* Soft Lavender/Violet */
-                        primaryLight: '#ede9fe',
-                        secondary: '#db2777', /* Warm Pink */
-                        surface: '#f8fafc',
+                        primary: '#0284c7', // main blue
+                        primaryLight: '#e0f2fe',
+                        secondary: '#0f766e', // teal color for accents
+                        surface: '#f0f9ff', // light cyan bg
+                        accent: '#38bdf8'
                     }
                 }
             }
         }
     </script>
+    
     <style>
-        body { font-family: 'Poppins', sans-serif; color: #334155; }
-        .view-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        /* base styles */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            color: #334155; 
+        }
+        
+        /* spa view hiding */
+        .view-section { 
+            display: none; 
+            animation: fadeIn 0.4s ease-in-out; 
+        }
         .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
         .faq-answer { display: none; }
         .faq-answer.open { display: block; }
+        
+        /* custom shadow cause tailwind ones were too harsh */
+        .medical-shadow { 
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.1), 0 8px 10px -6px rgba(2, 132, 199, 0.1); 
+        }
     </style>
 </head>
 <body class="bg-surface flex flex-col min-h-screen">
 
-    <!-- Navigation -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <!-- top navbar -->
+    <header class="sticky top-0 z-50 bg-white border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="navigate('home')">
-                    <i class="fa-solid fa-tooth text-primary text-3xl mr-2"></i>
-                    <span class="font-bold text-xl text-gray-800">Sakthi<br><span class="text-sm text-secondary font-medium">Dental Clinic</span></span>
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- logo area -->
+                <div class="cursor-pointer flex-shrink-0 flex items-center" onclick="navigate('home')">
+                    <div class="p-2 mr-3 rounded-lg bg-primaryLight">
+                        <i class="text-primary text-3xl fa-solid fa-tooth"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-800 leading-tight">Sakthi<br><span class="font-medium text-secondary text-sm tracking-wide">Dental Clinic</span></span>
                 </div>
                 
-                <!-- Desktop Menu -->
-                <nav class="hidden md:flex space-x-8 items-center">
-                    <button onclick="navigate('home')" class="text-gray-600 hover:text-primary font-medium transition">Home</button>
-                    <button onclick="navigate('about')" class="text-gray-600 hover:text-primary font-medium transition">About Us</button>
-                    <button onclick="navigate('treatments')" class="text-gray-600 hover:text-primary font-medium transition">Treatments</button>
-                    <button onclick="navigate('faqs')" class="text-gray-600 hover:text-primary font-medium transition">FAQs</button>
-                    <button onclick="navigate('contact')" class="text-gray-600 hover:text-primary font-medium transition">Contact</button>
-                    <button onclick="navigate('contact')" class="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-violet-700 transition shadow-md">Fix an Appointment</button>
+                <!-- desktop nav -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <button onclick="navigate('home')" class="font-medium text-gray-600 hover:text-primary transition">Home</button>
+                    <button onclick="navigate('about')" class="font-medium text-gray-600 hover:text-primary transition">About Us</button>
+                    <button onclick="navigate('treatments')" class="font-medium text-gray-600 hover:text-primary transition">Treatments</button>
+                    <!-- <button onclick="navigate('gallery')" class="font-medium text-gray-600 hover:text-primary transition">Gallery</button> -->
+                    <button onclick="navigate('faqs')" class="font-medium text-gray-600 hover:text-primary transition">FAQs</button>
+                    <button onclick="navigate('contact')" class="font-medium text-gray-600 hover:text-primary transition">Contact</button>
+                    <button onclick="navigate('contact')" class="font-medium px-7 py-2.5 rounded-full text-white bg-primary hover:bg-sky-700 transition medical-shadow">Fix an Appointment</button>
                 </nav>
 
-                <!-- Mobile Menu Button -->
+                <!-- mobile hamburger -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-primary focus:outline-none">
+                    <button id="mobile-menu-btn" class="focus:outline-none hover:text-primary text-gray-600">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu Panel -->
+        <!-- mobile dropdown menu (hidden by default) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col">
-                <button onclick="navigate('home')" class="text-left px-3 py-2 text-gray-600 hover:bg-primaryLight hover:text-primary rounded-md">Home</button>
-                <button onclick="navigate('about')" class="text-left px-3 py-2 text-gray-600 hover:bg-primaryLight hover:text-primary rounded-md">About Us</button>
-                <button onclick="navigate('treatments')" class="text-left px-3 py-2 text-gray-600 hover:bg-primaryLight hover:text-primary rounded-md">Treatments</button>
-                <button onclick="navigate('faqs')" class="text-left px-3 py-2 text-gray-600 hover:bg-primaryLight hover:text-primary rounded-md">FAQs</button>
-                <button onclick="navigate('contact')" class="text-left px-3 py-2 text-gray-600 hover:bg-primaryLight hover:text-primary rounded-md">Contact</button>
+            <div class="flex flex-col space-y-1 pt-2 pb-4 px-4 sm:px-3">
+                <button onclick="navigate('home')" class="font-medium px-3 py-3 rounded-lg text-left text-gray-600 hover:text-primary hover:bg-primaryLight">Home</button>
+                <button onclick="navigate('about')" class="font-medium px-3 py-3 rounded-lg text-left text-gray-600 hover:text-primary hover:bg-primaryLight">About Us</button>
+                <button onclick="navigate('treatments')" class="font-medium px-3 py-3 rounded-lg text-left text-gray-600 hover:text-primary hover:bg-primaryLight">Treatments</button>
+                <button onclick="navigate('faqs')" class="font-medium px-3 py-3 rounded-lg text-left text-gray-600 hover:text-primary hover:bg-primaryLight">FAQs</button>
+                <button onclick="navigate('contact')" class="font-medium px-3 py-3 rounded-lg text-left text-gray-600 hover:text-primary hover:bg-primaryLight">Contact</button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT AREA -->
+    <!-- MAIN CONTENT -->
     <main class="flex-grow">
         
-        <!-- ================= HOME VIEW ================= -->
+        <!-- HOME PAGE -->
         <div id="home" class="view-section active">
             
-            <!-- Hero Section -->
-            <section class="bg-primaryLight py-16 md:py-24">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center">
+            <!-- hero banner -->
+            <section class="relative overflow-hidden py-16 md:py-24 bg-gradient-to-br from-white to-primaryLight">
+                <div class="absolute -top-24 -right-24 bg-accent opacity-10 rounded-full blur-3xl w-96 h-96"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
                     <div>
-                        <span class="text-secondary font-semibold tracking-wider uppercase text-sm">Welcome to Sakthi Dental Clinic</span>
-                        <h1 class="mt-2 text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                        <div class="mb-6 px-3 py-1 font-bold text-xs uppercase tracking-wider text-secondary border border-teal-100 bg-teal-50 rounded-full inline-flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> Open Daily 9AM - 9PM
+                        </div>
+                        <h1 class="leading-tight font-bold text-4xl md:text-5xl lg:text-6xl text-gray-900">
                             Specialized Dental Care for Women, Children & Families
                         </h1>
-                        <p class="mt-4 text-lg text-gray-600">
-                            Experience compassionate, expert-led dental services tailored to your needs, all in a modern and welcoming environment.
+                        <p class="leading-relaxed mt-6 text-lg text-gray-600">
+                            Experience compassionate, expert-led dental services tailored to your needs, all in a modern, hygienic, and welcoming environment in Hosur.
                         </p>
-                        <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                            <button onclick="navigate('contact')" class="bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-violet-700 transition shadow-lg text-center">Fix an Appointment</button>
-                            <button onclick="navigate('contact')" class="bg-white text-secondary border border-secondary px-8 py-3 rounded-full font-medium hover:bg-pink-50 transition shadow text-center">Emergency Dental Support</button>
+                        
+                        <div class="mt-8 gap-4 flex flex-col sm:flex-row">
+                            <button onclick="navigate('contact')" class="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-semibold transition text-center text-white bg-primary hover:bg-sky-700 medical-shadow">
+                                Fix an Appointment <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                            <button onclick="navigate('contact')" class="flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-semibold transition text-center text-secondary bg-white hover:bg-teal-50 border-2 border-secondary">
+                                <i class="fa-solid fa-phone-volume"></i> Emergency Support
+                            </button>
+                        </div>
+                        
+                        <!-- social proof -->
+                        <div class="mt-10 flex items-center gap-4 text-sm font-medium text-gray-500">
+                            <div class="flex -space-x-2">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Patient" class="w-10 h-10 rounded-full border-2 border-white">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Patient" class="w-10 h-10 rounded-full border-2 border-white">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Patient" class="w-10 h-10 rounded-full border-2 border-white">
+                            </div>
+                            <p>Trusted by 5,000+ families in Hosur</p>
                         </div>
                     </div>
-                    <div class="rounded-2xl overflow-hidden shadow-2xl">
-                        <!-- Placeholder for Client Drive Image -->
-                        <img src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=800&q=80" alt="Friendly Dentist with Patient" class="w-full h-auto object-cover">
+                    
+                    <div class="relative overflow-hidden rounded-3xl medical-shadow">
+                        <!-- used unsplash placeholder since client images aren't loaded yet -->
+                        <img alt="Friendly Dentist with Patient" src="https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=800&q=80" class="w-full h-auto object-cover">
+                        
+                        <!-- little floating badge -->
+                        <div class="absolute bottom-6 left-6 p-4 bg-white rounded-2xl shadow-lg flex items-center gap-4">
+                            <div class="p-3 bg-green-100 text-green-600 rounded-full"><i class="text-xl fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <p class="font-bold text-sm text-gray-900">Advanced Tech</p>
+                                <p class="text-xs text-gray-500">Laser & Implants</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Assurance Banner -->
-            <section class="bg-secondary text-white py-8 text-center px-4">
-                <h2 class="text-2xl md:text-3xl font-semibold">You are always in safe hands. We are ready to help, anytime.</h2>
-            </section>
-
-            <!-- Why Choose Us -->
-            <section class="py-16 bg-white">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center max-w-3xl mx-auto mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900">Why Choose Sakthi Dental Clinic?</h2>
-                        <p class="mt-4 text-gray-600">Our philosophy is built on trust, comfort, and advanced care.</p>
+            <!-- why us section -->
+            <section class="bg-white py-16">
+                <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                    <div class="mb-16 mx-auto max-w-3xl text-center">
+                        <h2 class="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Why Choose Us</h2>
+                        <h3 class="font-bold text-3xl text-gray-900">Premium Care Built on Trust & Comfort</h3>
                     </div>
+                    
                     <div class="grid md:grid-cols-4 gap-8">
-                        <div class="text-center p-6 bg-surface rounded-xl">
-                            <div class="w-16 h-16 mx-auto bg-primaryLight text-primary rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-house-medical"></i></div>
-                            <h3 class="font-semibold text-lg mb-2">All-in-One Care</h3>
-                            <p class="text-sm text-gray-600">From general dentistry to specialized treatments, everything under one roof.</p>
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-50 transition duration-300 hover:-translate-y-1">
+                            <div class="mb-6 flex items-center justify-center bg-white text-primary w-14 h-14 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-house-medical"></i></div>
+                            <h4 class="mb-2 font-bold text-lg text-gray-900">All-in-One Care</h4>
+                            <p class="leading-relaxed text-sm text-gray-600">From general dentistry to specialized treatments, everything under one roof.</p>
                         </div>
-                        <div class="text-center p-6 bg-surface rounded-xl">
-                            <div class="w-16 h-16 mx-auto bg-primaryLight text-primary rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-user-doctor"></i></div>
-                            <h3 class="font-semibold text-lg mb-2">Experienced Doctors</h3>
-                            <p class="text-sm text-gray-600">Our dentists are professionally trained and committed to personalized care.</p>
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-50 transition duration-300 hover:-translate-y-1">
+                            <div class="mb-6 flex items-center justify-center bg-white text-primary w-14 h-14 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-user-doctor"></i></div>
+                            <h4 class="mb-2 font-bold text-lg text-gray-900">Experienced Doctors</h4>
+                            <p class="leading-relaxed text-sm text-gray-600">Our dentists are professionally trained and committed to personalized care.</p>
                         </div>
-                        <div class="text-center p-6 bg-surface rounded-xl">
-                            <div class="w-16 h-16 mx-auto bg-primaryLight text-primary rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                            <h3 class="font-semibold text-lg mb-2">Patient-Centric</h3>
-                            <p class="text-sm text-gray-600">We prioritize comfort, safety, and transparency in every treatment.</p>
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-50 transition duration-300 hover:-translate-y-1">
+                            <div class="mb-6 flex items-center justify-center bg-white text-primary w-14 h-14 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                            <h4 class="mb-2 font-bold text-lg text-gray-900">Patient-Centric</h4>
+                            <p class="leading-relaxed text-sm text-gray-600">We prioritize comfort, safety, and transparency in every treatment.</p>
                         </div>
-                        <div class="text-center p-6 bg-surface rounded-xl">
-                            <div class="w-16 h-16 mx-auto bg-primaryLight text-primary rounded-full flex items-center justify-center text-2xl mb-4"><i class="fa-solid fa-microscope"></i></div>
-                            <h3 class="font-semibold text-lg mb-2">Technology-Driven</h3>
-                            <p class="text-sm text-gray-600">Modern tools and equipment ensure precision and safety.</p>
+                        <div class="bg-surface p-8 rounded-2xl border border-blue-50 transition duration-300 hover:-translate-y-1">
+                            <div class="mb-6 flex items-center justify-center bg-white text-primary w-14 h-14 rounded-2xl text-2xl shadow-sm"><i class="fa-solid fa-microscope"></i></div>
+                            <h4 class="mb-2 font-bold text-lg text-gray-900">Technology-Driven</h4>
+                            <p class="leading-relaxed text-sm text-gray-600">Modern tools and laser equipment ensure precision and utmost safety.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Core Treatments -->
-            <section class="py-16 bg-surface">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-12">Explore Our Services</h2>
-                    <div class="grid md:grid-cols-3 gap-6 mb-10 text-left">
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-solid fa-tooth text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Tooth Extraction</h3>
-                                <p class="text-sm text-gray-600 mt-1">Safe and painless removal of impacted or decayed teeth.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-solid fa-teeth-open text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Artificial Denture</h3>
-                                <p class="text-sm text-gray-600 mt-1">Full mouth replacement to restore confidence and function.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-solid fa-fill-drip text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Tooth Filling</h3>
-                                <p class="text-sm text-gray-600 mt-1">Composite fillings for cavity treatment and tooth restoration.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-solid fa-wand-magic-sparkles text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Teeth Cleaning</h3>
-                                <p class="text-sm text-gray-600 mt-1">Preventive care to remove plaque and protect gums.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-regular fa-face-smile-beam text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Bleaching</h3>
-                                <p class="text-sm text-gray-600 mt-1">Cosmetic whitening treatments for a brighter smile.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-start">
-                            <i class="fa-solid fa-teeth text-secondary text-2xl mt-1"></i>
-                            <div>
-                                <h3 class="font-semibold text-lg">Orthodontic Treatment</h3>
-                                <p class="text-sm text-gray-600 mt-1">Braces and aligners to straighten and align teeth.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button onclick="navigate('treatments')" class="bg-white border-2 border-primary text-primary px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition">View Full List of Treatments</button>
-                </div>
-            </section>
-
-            <!-- Testimonials -->
-            <section class="py-16 bg-white">
+            <!-- mini facilities bar -->
+            <section class="py-12 bg-secondary text-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">What Our Patients Say</h2>
+                    <div class="flex flex-wrap justify-center gap-y-6 gap-x-12 text-center">
+                        <div class="flex flex-col items-center"><i class="mb-3 opacity-80 text-3xl fa-solid fa-car"></i><span class="font-medium text-sm">Hassle-free Parking</span></div>
+                        <div class="flex flex-col items-center"><i class="mb-3 opacity-80 text-3xl fa-solid fa-van-shuttle"></i><span class="font-medium text-sm">Pickup & Drop Support</span></div>
+                        <div class="flex flex-col items-center"><i class="mb-3 opacity-80 text-3xl fa-brands fa-accessible-icon"></i><span class="font-medium text-sm">Wheelchair Access</span></div>
+                        <div class="flex flex-col items-center"><i class="mb-3 opacity-80 text-3xl fa-regular fa-clock"></i><span class="font-medium text-sm">Open 9 AM - 9 PM</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- top treatments summary -->
+            <section class="bg-surface py-20">
+                <div class="text-center px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+                    <h2 class="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Our Expertise</h2>
+                    <h3 class="mb-12 text-3xl font-bold text-gray-900">Explore Core Services</h3>
+                    
+                    <div class="mb-12 gap-6 grid md:grid-cols-3 text-left">
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-solid fa-wand-magic-sparkles text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Teeth Cleaning</h4>
+                                <p class="text-sm text-gray-600">Preventive care to remove plaque and protect gums using advanced techniques.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-solid fa-fill-drip text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Tooth Filling</h4>
+                                <p class="text-sm text-gray-600">Composite fillings for cavity treatment and seamless tooth restoration.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-solid fa-tooth text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Painless Extraction</h4>
+                                <p class="text-sm text-gray-600">Safe and comfortable removal of impacted or severely decayed teeth.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-solid fa-teeth text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Orthodontics</h4>
+                                <p class="text-sm text-gray-600">Braces and clear aligners to straighten and perfectly align your teeth.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-regular fa-face-smile-beam text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Teeth Whitening</h4>
+                                <p class="text-sm text-gray-600">Cosmetic bleaching treatments for a significantly brighter, radiant smile.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl shadow-sm flex items-start gap-4 border border-gray-100 hover:shadow-md transition">
+                            <div class="p-3 rounded-xl bg-primaryLight text-primary"><i class="fa-solid fa-teeth-open text-xl"></i></div>
+                            <div>
+                                <h4 class="mb-1 font-bold text-gray-900">Dental Implants & Dentures</h4>
+                                <p class="text-sm text-gray-600">Full mouth replacements to restore chewing function and aesthetic confidence.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="navigate('treatments')" class="px-8 py-3 rounded-full font-medium transition bg-white text-primary border border-primary hover:text-white hover:bg-primary">Explore All 14+ Treatments</button>
+                </div>
+            </section>
+
+            <!-- Pricing packages -->
+            <section class="bg-white py-20">
+                <div class="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+                    <div class="mb-16 text-center max-w-3xl mx-auto">
+                        <h2 class="mb-2 text-sm font-bold tracking-widest text-primary uppercase">Clear & Transparent</h2>
+                        <h3 class="font-bold text-3xl text-gray-900">Standard Care Packages</h3>
+                        <p class="mt-4 text-gray-600">We believe in transparent pricing without hidden fees. A tailored quote will be provided after your initial examination.</p>
+                    </div>
+
                     <div class="grid md:grid-cols-3 gap-8">
-                        <div class="bg-primaryLight p-8 rounded-2xl relative">
-                            <i class="fa-solid fa-quote-left text-4xl text-primary opacity-20 absolute top-4 left-4"></i>
-                            <p class="text-gray-700 italic relative z-10">"The doctors are extremely kind and attentive. My braces treatment is progressing really well. 5/5."</p>
-                            <div class="mt-6 flex items-center gap-3">
-                                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">M</div>
-                                <div><h4 class="font-bold text-gray-900">Manisha M</h4><div class="text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div></div>
+                        <div class="relative flex flex-col p-8 rounded-3xl border border-gray-200 transition hover:border-primary">
+                            <h4 class="mb-2 font-bold text-xl text-gray-900">Initial Consultation</h4>
+                            <p class="mb-6 flex-grow text-sm text-gray-500">Perfect for new patients needing a comprehensive check-up.</p>
+                            <div class="mb-6 font-bold text-4xl text-primary">₹500<span class="font-normal text-lg text-gray-500">/visit</span></div>
+                            <ul class="mb-8 space-y-3 text-sm text-gray-700">
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Full oral examination</li>
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Digital X-rays (if required)</li>
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Personalized treatment plan</li>
+                            </ul>
+                            <button onclick="navigate('contact')" class="w-full py-3 rounded-xl font-semibold transition bg-primaryLight text-primary hover:bg-primary hover:text-white">Book Consultation</button>
+                        </div>
+                        
+                        <!-- popular package -->
+                        <div class="relative flex flex-col p-8 rounded-3xl border-2 border-primary shadow-xl transform md:-translate-y-4 bg-white">
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 rounded-full font-bold text-xs tracking-wider text-white uppercase bg-primary">Most Popular</div>
+                            <h4 class="mb-2 font-bold text-xl text-gray-900">Smile Refresh</h4>
+                            <p class="mb-6 flex-grow text-sm text-gray-500">Comprehensive preventive care to keep your gums and teeth healthy.</p>
+                            <div class="mb-6 font-bold text-4xl text-primary">Packages<span class="font-normal text-lg text-gray-500"> available</span></div>
+                            <ul class="mb-8 space-y-3 text-sm text-gray-700">
+                                <li class="flex gap-2"><i class="mt-1 text-primary fa-solid fa-check"></i> Professional Scaling & Cleaning</li>
+                                <li class="flex gap-2"><i class="mt-1 text-primary fa-solid fa-check"></i> Plaque & Tartar Removal</li>
+                                <li class="flex gap-2"><i class="mt-1 text-primary fa-solid fa-check"></i> Polishing for a brighter smile</li>
+                                <li class="flex gap-2"><i class="mt-1 text-primary fa-solid fa-check"></i> Oral hygiene instructions</li>
+                            </ul>
+                            <button onclick="navigate('contact')" class="w-full py-3 rounded-xl font-semibold transition text-white bg-primary hover:bg-sky-700 medical-shadow">Inquire Now</button>
+                        </div>
+
+                        <div class="relative flex flex-col p-8 rounded-3xl border border-gray-200 transition hover:border-primary">
+                            <h4 class="mb-2 font-bold text-xl text-gray-900">Orthodontics</h4>
+                            <p class="mb-6 flex-grow text-sm text-gray-500">Advanced braces and clear aligner plans tailored to you.</p>
+                            <div class="mb-6 font-bold text-4xl text-primary">Custom<span class="font-normal text-lg text-gray-500"> EMI</span></div>
+                            <ul class="mb-8 space-y-3 text-sm text-gray-700">
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Metal & Ceramic Braces options</li>
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Clear aligner mapping</li>
+                                <li class="flex gap-2"><i class="mt-1 text-green-500 fa-solid fa-check"></i> Flexible monthly payment plans</li>
+                            </ul>
+                            <button onclick="navigate('contact')" class="w-full py-3 rounded-xl font-semibold transition bg-primaryLight text-primary hover:bg-primary hover:text-white">Discuss Options</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- testimonials -->
+            <section class="bg-surface py-20">
+                <div class="px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+                    <h2 class="mb-2 text-sm text-center font-bold tracking-widest text-primary uppercase">Patient Stories</h2>
+                    <h3 class="mb-12 text-center text-3xl font-bold text-gray-900">What Our Patients Say</h3>
+                    <div class="gap-8 grid md:grid-cols-3">
+                        
+                        <!-- Client wants real photos here later, using initials for now -->
+                        <div class="relative p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                            <div class="mb-4 flex text-sm text-yellow-400"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <p class="mb-6 text-sm text-gray-700 italic relative z-10 leading-relaxed">"The doctors are extremely kind and attentive. My braces treatment is progressing really well. 5/5. Highly recommended."</p>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center font-bold w-10 h-10 rounded-full text-primary bg-primaryLight">M</div>
+                                <div><h4 class="text-sm font-bold text-gray-900">Manisha M</h4><p class="text-xs text-gray-500">Orthodontic Patient</p></div>
                             </div>
                         </div>
-                        <div class="bg-primaryLight p-8 rounded-2xl relative">
-                            <i class="fa-solid fa-quote-left text-4xl text-primary opacity-20 absolute top-4 left-4"></i>
-                            <p class="text-gray-700 italic relative z-10">"I got my teeth cleaned and whitened here, and the results were amazing. The staff is so humble. I’ve recommended Sakthi Dental Clinic to my entire family."</p>
-                            <div class="mt-6 flex items-center gap-3">
-                                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">A</div>
-                                <div><h4 class="font-bold text-gray-900">Mr. Arun Kumar</h4><div class="text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div></div>
+                        <div class="relative p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                            <div class="mb-4 flex text-sm text-yellow-400"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <p class="mb-6 text-sm text-gray-700 italic relative z-10 leading-relaxed">"I got my teeth cleaned and whitened here, and the results were amazing. The staff is so humble. I’ve recommended Sakthi Dental Clinic to my entire family."</p>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center font-bold w-10 h-10 rounded-full text-primary bg-primaryLight">A</div>
+                                <div><h4 class="text-sm font-bold text-gray-900">Mr. Arun Kumar</h4><p class="text-xs text-gray-500">Cosmetic Patient</p></div>
                             </div>
                         </div>
-                        <div class="bg-primaryLight p-8 rounded-2xl relative">
-                            <i class="fa-solid fa-quote-left text-4xl text-primary opacity-20 absolute top-4 left-4"></i>
-                            <p class="text-gray-700 italic relative z-10">"Their attention to detail is outstanding. My daughter needed braces and the entire process has been so smooth. Really grateful for their care."</p>
-                            <div class="mt-6 flex items-center gap-3">
-                                <div class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">R</div>
-                                <div><h4 class="font-bold text-gray-900">Mrs. Revathi S.</h4><div class="text-yellow-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div></div>
+                        <div class="relative p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                            <div class="mb-4 flex text-sm text-yellow-400"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                            <p class="mb-6 text-sm text-gray-700 italic relative z-10 leading-relaxed">"Their attention to detail is outstanding. My daughter needed braces and the entire process has been so smooth. Really grateful for their care."</p>
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center font-bold w-10 h-10 rounded-full text-primary bg-primaryLight">R</div>
+                                <div><h4 class="text-sm font-bold text-gray-900">Mrs. Revathi S.</h4><p class="text-xs text-gray-500">Pediatric Parent</p></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Amenities -->
-            <section class="py-16 bg-surface">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 class="text-3xl font-bold text-gray-900 text-center mb-12">Clinic Facilities</h2>
-                    <div class="flex flex-wrap justify-center gap-6">
-                        <div class="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-sm"><i class="fa-solid fa-location-dot text-primary text-xl"></i><span class="font-medium">Central Location</span></div>
-                        <div class="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-sm"><i class="fa-solid fa-car text-primary text-xl"></i><span class="font-medium">Hassle-free Parking</span></div>
-                        <div class="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-sm"><i class="fa-regular fa-clock text-primary text-xl"></i><span class="font-medium">Available Daily (9 AM - 9 PM)</span></div>
-                        <div class="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-sm"><i class="fa-solid fa-van-shuttle text-primary text-xl"></i><span class="font-medium">Pickup & Drop-off Support</span></div>
-                        <div class="flex items-center gap-3 bg-white px-6 py-4 rounded-full shadow-sm"><i class="fa-brands fa-accessible-icon text-primary text-xl"></i><span class="font-medium">Wheelchair Access</span></div>
+            <!-- CTA banner -->
+            <section class="relative overflow-hidden py-16 bg-primary text-center text-white">
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#fff 2px, transparent 2px); background-size: 30px 30px;"></div>
+                <div class="relative z-10 max-w-4xl mx-auto px-4">
+                    <h2 class="mb-4 font-bold text-3xl md:text-4xl">Ready to transform your smile?</h2>
+                    <p class="mb-8 text-lg text-primaryLight">Join the thousands of happy families in Hosur who trust Dr. Anupriya and her expert team.</p>
+                    <button onclick="navigate('contact')" class="inline-block px-10 py-4 font-bold rounded-full transition shadow-xl text-lg text-primary bg-white hover:bg-gray-50">
+                        Book Your Appointment Today
+                    </button>
+                </div>
+            </section>
+            
+            <!-- lead form -->
+            <section class="bg-white py-20" id="home-contact">
+                <div class="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+                    <div class="flex flex-col md:flex-row overflow-hidden rounded-3xl shadow-lg border border-blue-50 bg-surface">
+                        
+                        <!-- left form area -->
+                        <div class="bg-white w-full md:w-3/5 p-8 md:p-12">
+                            <h2 class="mb-2 font-bold text-3xl text-gray-900">Request an Appointment</h2>
+                            <p class="mb-8 text-sm text-gray-500">Leave your details below and our clinic coordinator will call you to confirm your slot.</p>
+                            
+                            <form id="homeContactForm" onsubmit="handleFormSubmit(event, 'homeFormSuccess', 'homeBtn')" class="space-y-5">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block mb-1 font-medium text-sm text-gray-700">Name <span class="text-red-500">*</span></label>
+                                        <input type="text" required class="w-full px-4 py-3 bg-surface border border-gray-200 rounded-xl outline-none transition focus:ring-2 focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <label class="block mb-1 font-medium text-sm text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+                                        <input type="tel" required pattern="[0-9]{10,14}" title="Please enter a valid phone number" class="w-full px-4 py-3 bg-surface border border-gray-200 rounded-xl outline-none transition focus:ring-2 focus:ring-primary focus:border-primary">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block mb-1 font-medium text-sm text-gray-700">Email <span class="text-red-500">*</span></label>
+                                    <input type="email" required class="w-full px-4 py-3 bg-surface border border-gray-200 rounded-xl outline-none transition focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="block mb-1 font-medium text-sm text-gray-700">Briefly describe your dental issue (Optional)</label>
+                                    <textarea rows="3" style="resize: vertical;" class="w-full px-4 py-3 bg-surface border border-gray-200 rounded-xl outline-none transition focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+                                </div>
+                                <button type="submit" id="homeBtn" class="w-full py-3.5 px-4 font-bold rounded-xl transition duration-300 text-white bg-primary hover:bg-sky-700 medical-shadow">
+                                    Submit Request
+                                </button>
+                                
+                                <div id="homeFormSuccess" class="hidden p-4 text-center font-medium text-sm rounded-xl text-green-700 bg-green-50 border border-green-100">
+                                    <i class="mr-2 fa-solid fa-circle-check"></i> Thank you! Your request has been received. Our team will contact you shortly.
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- right side contact info -->
+                        <div class="relative flex flex-col justify-center overflow-hidden w-full md:w-2/5 p-8 md:p-12 text-white bg-secondary">
+                            <!-- faint bg icon -->
+                            <i class="absolute -bottom-10 -right-10 text-9xl opacity-10 fa-solid fa-tooth"></i>
+                            
+                            <h3 class="relative z-10 mb-8 font-bold text-2xl">Clinic Information</h3>
+                            <ul class="relative z-10 space-y-8">
+                                <li class="flex items-start">
+                                    <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-solid fa-location-dot"></i></div>
+                                    <div>
+                                        <strong class="mb-1 block text-lg">Address</strong>
+                                        <span class="text-sm leading-relaxed opacity-90">B2/8, SBM Layout, Anthivadi, Hosur, Tamil Nadu 635109, India</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-solid fa-phone"></i></div>
+                                    <div>
+                                        <strong class="mb-1 block text-lg">Call Us</strong>
+                                        <span class="text-sm opacity-90">+91 9862890897<br>+91 9363298118</span>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-regular fa-clock"></i></div>
+                                    <div>
+                                        <strong class="mb-1 block text-lg">Timings</strong>
+                                        <span class="text-sm font-bold text-yellow-300">Sun - Sat: 9 AM to 7 PM</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- ================= ABOUT VIEW ================= -->
+        <!-- ================= ABOUT PAGE ================= -->
         <div id="about" class="view-section py-16 bg-white">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">About Us</h1>
+                <div class="text-center mb-12">
+                    <h2 class="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Our Story</h2>
+                    <h1 class="text-4xl font-bold text-gray-900">About Sakthi Dental Clinic</h1>
+                </div>
                 
-                <h2 class="text-2xl font-bold text-primary mb-4">Get to Know Dr. Anupriya</h2>
-                <h3 class="text-xl text-secondary font-semibold mb-4">Your Trusted Partner in Dental Care</h3>
-                <p class="text-gray-700 mb-4 leading-relaxed">Bringing over 20 years of expertise, Dr. Anupriya stands as a leading figure in modern dentistry at Hosur. She began her professional journey after graduating in 2000. Her passion for delivering exceptional dental care was further nurtured during six impactful years at Mathura Clinic, where she refined her clinical skills and deepened her commitment to patient wellbeing.</p>
-                <p class="text-gray-700 mb-4 leading-relaxed">In 2004, Dr. Anupriya established Sakthi Dental Clinic in Hosur with a clear vision to make high-quality dental care accessible to all. Her dedication extends beyond private practice, reflected in her long-standing service with the Primary Health Center at Chandara Hospital, where she has been a trusted dental consultant for over a decade.</p>
-                <p class="text-gray-700 mb-8 leading-relaxed">At Sakthi Dental Clinic, we believe that a healthy smile is a gateway to confidence and wellbeing. Our clinic blends advanced dental technology with a warm, patient-friendly environment to ensure every visit is comfortable and stress-free. Whether you're looking for preventive care, cosmetic enhancements, or restorative solutions, Dr. Anupriya and her team are committed to delivering excellence at every step. Because here, your smile isn’t just treated—it’s celebrated.</p>
-
-                <hr class="my-10 border-gray-200">
-
-                <div class="grid md:grid-cols-2 gap-10 mb-12">
-                    <div class="bg-primaryLight p-8 rounded-2xl">
-                        <h2 class="text-2xl font-bold text-primary mb-4"><i class="fa-solid fa-bullseye mr-2"></i>Our Mission</h2>
-                        <p class="text-gray-700 leading-relaxed">To redefine oral healthcare by delivering personalized, compassionate, and advanced dental services. We are committed to creating a welcoming environment where patients feel comfortable. By integrating state-of-the-art technology with patient-centric care, we ensure every treatment enhances your smile and well-being.</p>
+                <div class="mb-12 flex flex-col md:flex-row gap-8 items-center p-8 rounded-3xl bg-surface border border-blue-50">
+                    <div class="flex-shrink-0 flex items-center justify-center w-32 h-32 text-5xl rounded-full text-primary bg-primaryLight">
+                        <i class="fa-solid fa-user-doctor"></i>
                     </div>
-                    <div class="bg-pink-50 p-8 rounded-2xl">
-                        <h2 class="text-2xl font-bold text-secondary mb-4"><i class="fa-solid fa-eye mr-2"></i>Our Vision</h2>
-                        <p class="text-gray-700 leading-relaxed">To be a leading force in modern dentistry, known for setting new standards in patient care, innovation, and community engagement. We aspire to not only deliver exceptional dental outcomes but also to contribute positively to the community through awareness initiatives.</p>
+                    <div>
+                        <h2 class="mb-2 text-2xl font-bold text-gray-900">Get to Know Dr. Anupriya</h2>
+                        <h3 class="mb-4 text-lg font-semibold text-secondary">Your Trusted Partner in Dental Care</h3>
+                        <p class="mb-3 text-sm leading-relaxed text-gray-700">Bringing over 20 years of expertise, Dr. Anupriya stands as a leading figure in modern dentistry at Hosur. Graduating in 2000, she refined her clinical skills during six impactful years at Mathura Clinic.</p>
+                        <p class="text-sm leading-relaxed text-gray-700">In 2004, Dr. Anupriya established Sakthi Dental Clinic. Her dedication is also reflected in her long-standing service as a trusted dental consultant at the Primary Health Center at Chandara Hospital for over a decade.</p>
                     </div>
                 </div>
 
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Our Team of Doctors</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-primary">Dr. Anupriya</span> <span class="text-sm text-gray-500">Founder</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Ananya Iyer</span> <span class="text-sm text-gray-500">Prosthodontist</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Meera Subramanian</span> <span class="text-sm text-gray-500">Endodontist</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Arvind Kumar</span> <span class="text-sm text-gray-500">Dental Surgeon</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Sneha N</span> <span class="text-sm text-gray-500">Orthodontist</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Srinivas Rohit R.</span> <span class="text-sm text-gray-500">Implantologist</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Balu</span> <span class="text-sm text-gray-500">Laser Surgeon</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Vikram Raj Kishore</span> <span class="text-sm text-gray-500">Aligners Partner</span></div>
-                    <div class="p-4 border border-gray-100 rounded-lg shadow-sm text-center"><span class="font-bold block text-gray-800">Dr. Ajay Jumar</span> <span class="text-sm text-gray-500">Oral & Maxillofacial Surgeon</span></div>
+                <!-- mission / vision -->
+                <div class="mb-16 gap-8 grid md:grid-cols-2">
+                    <div class="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
+                        <div class="mb-6 flex items-center justify-center w-12 h-12 text-xl rounded-xl text-primary bg-primaryLight"><i class="fa-solid fa-bullseye"></i></div>
+                        <h2 class="mb-4 text-2xl font-bold text-gray-900">Our Mission</h2>
+                        <p class="text-sm leading-relaxed text-gray-600">To redefine oral healthcare by delivering personalized, compassionate, and advanced dental services. We integrate state-of-the-art technology with patient-centric care to ensure every treatment enhances your smile and well-being.</p>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-white shadow-sm border border-gray-100">
+                        <div class="mb-6 flex items-center justify-center w-12 h-12 text-xl rounded-xl text-secondary bg-teal-50"><i class="fa-solid fa-eye"></i></div>
+                        <h2 class="mb-4 text-2xl font-bold text-gray-900">Our Vision</h2>
+                        <p class="text-sm leading-relaxed text-gray-600">To be a leading force in modern dentistry, known for setting new standards in patient care, innovation, and community engagement. We aspire to deliver exceptional dental outcomes and contribute positively to the community.</p>
+                    </div>
+                </div>
+
+                <h2 class="mb-8 pb-4 text-center text-2xl font-bold text-gray-900 border-b">Our Specialist Team</h2>
+                <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                    <div class="p-4 text-center rounded-xl bg-surface"><span class="mb-1 block font-bold text-primary">Dr. Anupriya</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Founder</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Ananya Iyer</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Prosthodontist</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Meera S.</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Endodontist</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Arvind Kumar</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Dental Surgeon</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Sneha N</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Orthodontist</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Srinivas R.</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Implantologist</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Balu</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Laser Surgeon</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Vikram R.K.</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Aligners Partner</span></div>
+                    <div class="p-4 text-center rounded-xl bg-white shadow-sm border border-gray-100"><span class="mb-1 block font-bold text-gray-800">Dr. Ajay Jumar</span> <span class="text-xs font-medium uppercase tracking-wider text-gray-500">Maxillofacial</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= TREATMENTS VIEW ================= -->
+        <!-- ================= TREATMENTS PAGE ================= -->
         <div id="treatments" class="view-section py-16 bg-surface">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-4xl font-bold text-gray-900 mb-4 text-center">Comprehensive Dental Treatments</h1>
-                <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">From preventive care to advanced surgical procedures, we provide comprehensive solutions to keep your smile healthy and radiant.</p>
+                <div class="mb-12 text-center">
+                    <h2 class="mb-2 text-sm font-bold uppercase tracking-widest text-primary">A-Z Care</h2>
+                    <h1 class="mb-4 text-4xl font-bold text-gray-900">Complete Dental Treatments</h1>
+                    <p class="mx-auto max-w-2xl text-gray-600">From preventive care to advanced surgical procedures, we provide comprehensive solutions to keep your smile healthy and radiant.</p>
+                </div>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Treatments injected directly for completeness -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Teeth Cleaning & Scaling</h3>
-                        <p class="text-gray-600 text-sm">Advanced, non-surgical gum care using modern LASER technology. Scaling removes plaque and tartar, serving as a crucial preparatory step before any surgical intervention.</p>
+                <!-- all treatments list -->
+                <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Teeth Cleaning & Scaling</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Advanced, non-surgical gum care using modern LASER technology. Scaling safely removes plaque and tartar.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Tooth Filling</h3>
-                        <p class="text-gray-600 text-sm">Expert tooth filling services using high-quality materials to repair damage caused by cavities, trauma, or wear, preserving your natural tooth structure.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Tooth Filling</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Expert tooth filling services using high-quality materials to repair cavities and preserve natural structure.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Tooth Extraction</h3>
-                        <p class="text-gray-600 text-sm">When necessary, we perform extractions using gentle techniques to minimize discomfort in a stress-free environment, making it as smooth and painless as possible.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Tooth Extraction</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Careful evaluation and gentle extraction techniques to minimize discomfort in a stress-free environment.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Artificial Complete Denture</h3>
-                        <p class="text-gray-600 text-sm">High-quality, precision-crafted complete dentures to restore function and aesthetics, providing a natural look and comfortable fit for missing teeth.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Complete Denture</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">High-quality complete dentures to restore function and aesthetics, providing a comfortable fit for missing teeth.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Dental Implants</h3>
-                        <p class="text-gray-600 text-sm">A modern, reliable solution using biocompatible titanium artificial roots to securely place prosthetic teeth, restoring both appearance and strength.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Dental Implants</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Reliable solutions using biocompatible titanium artificial roots to restore appearance and structural strength.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Laser Dentistry</h3>
-                        <p class="text-gray-600 text-sm">Advanced, minimally invasive treatments for soft tissue surgeries and gum care, offering faster healing, reduced discomfort, and enhanced accuracy.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Laser Dentistry</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Minimally invasive soft tissue surgeries and gum care offering faster healing and reduced discomfort.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Root Canal Therapy</h3>
-                        <p class="text-gray-600 text-sm">Careful removal of infected tissue to relieve pain, eliminate infection, and preserve your natural tooth structure when infection reaches the pulp.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Root Canal Therapy</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Careful removal of infected tissue to relieve pain and preserve your natural tooth for long-term health.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Wisdom Tooth Extraction</h3>
-                        <p class="text-gray-600 text-sm">Gentle and effective removal of impacted or problematic wisdom teeth using modern techniques and anesthesia for a pain-free experience.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Wisdom Tooth Extraction</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Gentle removal of impacted or problematic wisdom teeth using modern anesthesia for a pain-free experience.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Fixed Partial Denture (Bridge)</h3>
-                        <p class="text-gray-600 text-sm">Custom-made dental bridges anchored to adjacent teeth or implants to restore your smile's appearance and improve chewing function.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Fixed Bridge</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Custom-made dental bridges anchored to adjacent teeth or implants to improve chewing function.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Teeth Whitening (Bleaching)</h3>
-                        <p class="text-gray-600 text-sm">Professional services using safe agents to lighten teeth by several shades, treating both external and internal stains to restore natural radiance.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Teeth Whitening</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Professional services using safe agents to lighten teeth by several shades, treating deep stains.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Veneers</h3>
-                        <p class="text-gray-600 text-sm">Thin, custom-made shells designed to cover imperfections like chips, gaps, or discoloration, providing a flawless and natural-looking smile.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Veneers</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Thin, custom-made shells designed to cover imperfections like chips or discoloration for a flawless smile.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Pediatric Dentistry</h3>
-                        <p class="text-gray-600 text-sm">Gentle, comprehensive care for children in a welcoming environment, focusing on building healthy dental habits for a lifetime of bright smiles.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Pediatric Dentistry</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Gentle, comprehensive care for children in a welcoming environment, building healthy lifetime habits.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-primary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Flap Surgery</h3>
-                        <p class="text-gray-600 text-sm">For advanced gum disease, lifting the gum tissue to remove deep-seated plaque and bacteria, supporting optimal healing and preventing periodontal issues.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Flap Surgery</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">For advanced gum disease, lifting gum tissue to remove deep-seated bacteria, supporting optimal healing.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-secondary hover:shadow-md transition">
-                        <h3 class="font-bold text-xl mb-3 text-gray-900">Orthodontic Braces & Aligners</h3>
-                        <p class="text-gray-600 text-sm">Correct misaligned teeth with metal, ceramic, or lingual braces, or choose discreet, removable clear aligners for comfort and flexibility.</p>
+                    <div class="p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-primary">
+                        <h3 class="mb-2 text-lg font-bold text-gray-900"><i class="mr-2 text-sm text-primary fa-solid fa-circle-check"></i> Orthodontic Braces</h3>
+                        <p class="text-sm leading-relaxed text-gray-600">Correct misaligned teeth with metal, ceramic, or lingual braces, or transparent clear aligners.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= FAQS VIEW ================= -->
+        <!-- ================= FAQS PAGE ================= -->
         <div id="faqs" class="view-section py-16 bg-white">
             <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h1>
+                <div class="mb-12 text-center">
+                    <h2 class="mb-2 text-sm font-bold uppercase tracking-widest text-primary">Education</h2>
+                    <h1 class="mb-4 text-4xl font-bold text-gray-900">Frequently Asked Questions</h1>
+                </div>
                 
                 <div class="space-y-4" id="faq-container">
-                    <!-- FAQs will be generated by JS -->
+                    <!-- js inserts faqs here -->
                 </div>
             </div>
         </div>
 
-        <!-- ================= CONTACT VIEW ================= -->
+        <!-- ================= CONTACT PAGE ================= -->
         <div id="contact" class="view-section py-16 bg-surface">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
-                    
-                    <!-- Left: Form -->
-                    <div class="w-full md:w-3/5 p-8 md:p-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-6">We would love to hear from you</h2>
-                        <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-500">*</span></label>
-                                <input type="text" id="formName" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+            <div class="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row overflow-hidden rounded-3xl shadow-lg border border-blue-50 bg-white">
+                    <div class="w-full md:w-3/5 p-8 md:p-12 bg-white">
+                        <h2 class="mb-2 text-3xl font-bold text-gray-900">We would love to hear from you</h2>
+                        <p class="mb-8 text-sm text-gray-500">Please fill out the form below and we will get back to you shortly.</p>
+                        
+                        <form id="standaloneContactForm" onsubmit="handleFormSubmit(event, 'standaloneFormSuccess', 'standaloneBtn')" class="space-y-5">
+                            <div class="gap-5 grid grid-cols-1 sm:grid-cols-2">
+                                <div>
+                                    <label class="mb-1 block text-sm font-medium text-gray-700">Name <span class="text-red-500">*</span></label>
+                                    <input type="text" required class="w-full px-4 py-3 rounded-xl outline-none transition bg-surface border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label class="mb-1 block text-sm font-medium text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+                                    <input type="tel" required pattern="[0-9]{10,14}" class="w-full px-4 py-3 rounded-xl outline-none transition bg-surface border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary">
+                                </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
-                                <input type="email" id="formEmail" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+                                <label class="mb-1 block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                                <input type="email" required class="w-full px-4 py-3 rounded-xl outline-none transition bg-surface border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-red-500">*</span></label>
-                                <input type="tel" id="formPhone" required pattern="[0-9]{10,14}" title="Please enter a valid phone number" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition">
+                                <label class="mb-1 block text-sm font-medium text-gray-700">Your Message (Optional)</label>
+                                <textarea rows="4" style="resize: vertical;" class="w-full px-4 py-3 rounded-xl outline-none transition bg-surface border border-gray-200 focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
                             </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Message (Optional)</label>
-                                <textarea id="formMessage" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"></textarea>
-                            </div>
-                            <button type="submit" class="w-full bg-secondary hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 shadow-md">
+                            <button type="submit" id="standaloneBtn" class="w-full py-3.5 px-4 font-bold rounded-xl transition duration-300 text-white bg-primary hover:bg-sky-700 medical-shadow">
                                 Submit Request
                             </button>
-                            <div id="formSuccess" class="hidden text-green-600 bg-green-50 p-3 rounded-lg text-sm text-center">Thank you! Your request has been received.</div>
+                            <div id="standaloneFormSuccess" class="hidden p-4 text-center text-sm font-medium rounded-xl text-green-700 bg-green-50 border border-green-100">
+                                <i class="mr-2 fa-solid fa-circle-check"></i> Thank you! Your request has been received.
+                            </div>
                         </form>
                     </div>
-
-                    <!-- Right: Info -->
-                    <div class="w-full md:w-2/5 bg-primary text-white p-8 md:p-12 flex flex-col justify-center">
-                        <h3 class="text-2xl font-bold mb-8">Reach Us</h3>
-                        <ul class="space-y-8">
+                    
+                    <div class="relative flex flex-col justify-center overflow-hidden w-full md:w-2/5 p-8 md:p-12 text-white bg-primary">
+                        <i class="absolute -bottom-10 -right-10 text-9xl opacity-10 fa-solid fa-tooth"></i>
+                        <h3 class="relative z-10 mb-8 font-bold text-2xl">Reach Us</h3>
+                        <ul class="relative z-10 space-y-8">
                             <li class="flex items-start">
-                                <i class="fa-solid fa-location-dot text-2xl mr-4 mt-1 opacity-80"></i>
+                                <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-solid fa-location-dot"></i></div>
                                 <div>
-                                    <strong class="block text-lg">Address</strong>
-                                    <span class="opacity-90">B2/8, SBM Layout, Anthivadi, Hosur, Tamil Nadu 635109, India</span>
+                                    <strong class="mb-1 block text-lg">Address</strong>
+                                    <span class="text-sm leading-relaxed opacity-90">B2/8, SBM Layout, Anthivadi, Hosur, Tamil Nadu 635109, India</span>
                                 </div>
                             </li>
                             <li class="flex items-start">
-                                <i class="fa-solid fa-envelope text-2xl mr-4 mt-1 opacity-80"></i>
+                                <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-solid fa-envelope"></i></div>
                                 <div>
-                                    <strong class="block text-lg">Email</strong>
-                                    <a href="mailto:info@sakthidentalclinic.in" class="opacity-90 hover:underline">info@sakthidentalclinic.in</a>
+                                    <strong class="mb-1 block text-lg">Email</strong>
+                                    <a href="mailto:info@sakthidentalclinic.in" class="text-sm opacity-90 hover:underline">info@sakthidentalclinic.in</a>
                                 </div>
                             </li>
                             <li class="flex items-start">
-                                <i class="fa-solid fa-phone text-2xl mr-4 mt-1 opacity-80"></i>
+                                <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-solid fa-phone"></i></div>
                                 <div>
-                                    <strong class="block text-lg">Phone</strong>
-                                    <span class="opacity-90">+91 9862890897<br>+91 9363298118</span>
+                                    <strong class="mb-1 block text-lg">Phone</strong>
+                                    <span class="text-sm opacity-90">+91 9862890897<br>+91 9363298118</span>
                                 </div>
                             </li>
                             <li class="flex items-start">
-                                <i class="fa-regular fa-clock text-2xl mr-4 mt-1 opacity-80"></i>
+                                <div class="mr-4 p-2.5 rounded-lg bg-white/20"><i class="text-xl fa-regular fa-clock"></i></div>
                                 <div>
-                                    <strong class="block text-lg">Timings</strong>
-                                    <span class="font-bold text-yellow-300">Sunday to Saturday: 9am to 7pm</span>
+                                    <strong class="mb-1 block text-lg">Timings</strong>
+                                    <span class="text-sm font-bold text-yellow-300">Sun - Sat: 9 AM to 7 PM</span>
                                 </div>
                             </li>
                         </ul>
@@ -430,112 +645,127 @@
             </div>
         </div>
 
-        <!-- ================= PRIVACY VIEW ================= -->
+        <!-- ================= PRIVACY PAGE ================= -->
         <div id="privacy" class="view-section py-16 bg-white">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-violet text-gray-700">
-                <h1 class="text-3xl font-bold text-gray-900 mb-6">Privacy Policy</h1>
-                <p>At Sakthi Dental Clinic, we are committed to protecting your privacy. This Privacy Policy outlines how we collect, use, store, and disclose information from visitors and users of our website.</p>
-                <h3 class="text-xl font-bold mt-6 mb-2 text-gray-900">Information We Collect</h3>
-                <p>We may collect personal identification information from users in several ways, including when users: visit our website, fill out forms, or engage with features. Types of information include: Name, Email address, Phone number. Users can visit our site anonymously.</p>
-                <h3 class="text-xl font-bold mt-6 mb-2 text-gray-900">Cookies</h3>
-                <p>Our website may use “cookies” to enhance the user experience. Users can set their browser to refuse cookies.</p>
-                <h3 class="text-xl font-bold mt-6 mb-2 text-gray-900">How We Use Your Information</h3>
-                <ul class="list-disc pl-5 mb-4">
-                    <li>To operate and manage the website.</li>
-                    <li>To improve customer service.</li>
-                    <li>To enhance the website experience.</li>
-                    <li>To communicate via email.</li>
-                </ul>
-                <h3 class="text-xl font-bold mt-6 mb-2 text-gray-900">Data Security & Sharing</h3>
-                <p>We implement appropriate security measures. We do not sell, trade, or rent personal identification information to third parties.</p>
-                <p class="mt-8 text-sm text-gray-500">By using this website, you agree to this policy. Last Updated: October 2026.</p>
+            <div class="px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl text-gray-700">
+                <h1 class="mb-8 pb-4 font-bold text-3xl text-gray-900 border-b">Privacy Policy</h1>
+                <div class="space-y-6 text-sm leading-relaxed">
+                    <p>At Sakthi Dental Clinic, we are committed to protecting your privacy. This Privacy Policy outlines how we collect, use, store, and disclose information from visitors and users of our website.</p>
+                    
+                    <h3 class="mt-8 font-bold text-xl text-gray-900">Information We Collect</h3>
+                    <p>We may collect personal identification information from users in several ways, including when users: visit our website, fill out forms, or engage with features. Types of information include: Name, Email address, Phone number. Users can visit our site anonymously.</p>
+                    
+                    <h3 class="mt-8 font-bold text-xl text-gray-900">Cookies</h3>
+                    <p>Our website may use “cookies” to enhance the user experience. Users can set their browser to refuse cookies.</p>
+                    
+                    <h3 class="mt-8 font-bold text-xl text-gray-900">How We Use Your Information</h3>
+                    <ul class="pl-5 space-y-2 list-disc">
+                        <li>To operate and manage the website.</li>
+                        <li>To improve customer service.</li>
+                        <li>To enhance the website experience.</li>
+                        <li>To communicate via email.</li>
+                    </ul>
+                    
+                    <h3 class="mt-8 font-bold text-xl text-gray-900">Data Security & Sharing</h3>
+                    <p>We implement appropriate security measures. We do not sell, trade, or rent personal identification information to third parties.</p>
+                    <p class="mt-12 pt-4 border-t text-xs text-gray-500">By using this website, you agree to this policy. Last Updated: October 2026.</p>
+                </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <!-- footer section -->
+    <footer class="bg-gray-900 text-white py-14">
+        <div class="gap-10 grid grid-cols-1 md:grid-cols-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div>
-                <h3 class="text-xl font-bold mb-4 flex items-center"><i class="fa-solid fa-tooth text-primary mr-2"></i> Sakthi Dental</h3>
-                <p class="text-gray-400 text-sm">Specialized dental care for women, children & families in Hosur.</p>
-                <div class="mt-4 flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fa-brands fa-youtube"></i></a>
+                <h3 class="mb-4 flex items-center font-bold text-xl"><div class="mr-2 p-2 rounded-lg bg-gray-800"><i class="text-primary fa-solid fa-tooth"></i></div> Sakthi Dental</h3>
+                <p class="text-sm leading-relaxed text-gray-400">Specialized dental care for women, children & families in Hosur. Premium care in a hygienic environment.</p>
+                <div class="mt-6 flex space-x-4">
+                    <a href="#" class="flex items-center justify-center w-10 h-10 p-2 rounded-full transition text-gray-400 bg-gray-800 hover:text-white hover:bg-primary"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 p-2 rounded-full transition text-gray-400 bg-gray-800 hover:text-white hover:bg-primary"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 p-2 rounded-full transition text-gray-400 bg-gray-800 hover:text-white hover:bg-primary"><i class="fa-brands fa-youtube"></i></a>
                 </div>
             </div>
             <div>
-                <h4 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Quick Links</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><button onclick="navigate('home')" class="hover:text-primary transition">Home</button></li>
-                    <li><button onclick="navigate('about')" class="hover:text-primary transition">About Us</button></li>
-                    <li><button onclick="navigate('treatments')" class="hover:text-primary transition">Treatments</button></li>
-                    <li><button onclick="navigate('privacy')" class="hover:text-primary transition">Privacy Policy</button></li>
+                <h4 class="mb-6 font-semibold text-lg">Quick Links</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><button onclick="navigate('home')" class="flex items-center transition hover:text-primary"><i class="mr-2 text-xs fa-solid fa-angle-right"></i> Home</button></li>
+                    <li><button onclick="navigate('about')" class="flex items-center transition hover:text-primary"><i class="mr-2 text-xs fa-solid fa-angle-right"></i> About Us</button></li>
+                    <li><button onclick="navigate('treatments')" class="flex items-center transition hover:text-primary"><i class="mr-2 text-xs fa-solid fa-angle-right"></i> Treatments</button></li>
+                    <li><button onclick="navigate('privacy')" class="flex items-center transition hover:text-primary"><i class="mr-2 text-xs fa-solid fa-angle-right"></i> Privacy Policy</button></li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Key Treatments</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li>Teeth Cleaning & Scaling</li>
-                    <li>Dental Implants</li>
-                    <li>Orthodontic Braces</li>
-                    <li>Pediatric Dentistry</li>
+                <h4 class="mb-6 font-semibold text-lg">Key Treatments</h4>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li class="flex items-center"><i class="mr-2 text-xs text-primary fa-solid fa-check"></i> Teeth Cleaning & Scaling</li>
+                    <li class="flex items-center"><i class="mr-2 text-xs text-primary fa-solid fa-check"></i> Dental Implants</li>
+                    <li class="flex items-center"><i class="mr-2 text-xs text-primary fa-solid fa-check"></i> Orthodontic Braces</li>
+                    <li class="flex items-center"><i class="mr-2 text-xs text-primary fa-solid fa-check"></i> Pediatric Dentistry</li>
                 </ul>
             </div>
             <div>
-                <h4 class="text-lg font-semibold mb-4 border-b border-gray-700 pb-2">Contact Info</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><i class="fa-solid fa-location-dot w-5 text-center mr-1"></i> Anthivadi, Hosur</li>
-                    <li><i class="fa-solid fa-phone w-5 text-center mr-1"></i> +91 9862890897</li>
-                    <li><i class="fa-solid fa-envelope w-5 text-center mr-1"></i> info@sakthidentalclinic.in</li>
+                <h4 class="mb-6 font-semibold text-lg">Contact Info</h4>
+                <ul class="space-y-4 text-sm text-gray-400">
+                    <li class="flex items-start"><i class="mt-1 w-6 text-primary fa-solid fa-location-dot"></i> <span>Anthivadi, Hosur, Tamil Nadu</span></li>
+                    <li class="flex items-start"><i class="mt-1 w-6 text-primary fa-solid fa-phone"></i> <span>+91 9862890897</span></li>
+                    <li class="flex items-start"><i class="mt-1 w-6 text-primary fa-solid fa-envelope"></i> <span>info@sakthidentalclinic.in</span></li>
                 </ul>
             </div>
         </div>
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
+        <div class="mt-12 pt-8 text-center border-t border-gray-800 text-sm text-gray-500">
             &copy; 2026 Sakthi Dental Clinic. All Rights Reserved.
         </div>
     </footer>
 
-    <!-- JavaScript for SPA Logic -->
+    <!-- scripts -->
     <script>
-        // Navigation Logic
+        // basic routing for the SPA
         function navigate(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Close mobile menu if open
+            // hide mobile menu when navigating
             const mobileMenu = document.getElementById('mobile-menu');
             if(!mobileMenu.classList.contains('hidden')) {
                 mobileMenu.classList.add('hidden');
             }
         }
 
-        // Mobile Menu Toggle
+        // open/close mobile nav
         document.getElementById('mobile-menu-btn').addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.toggle('hidden');
         });
 
-        // Form Validation Logic
-        function handleFormSubmit(e) {
+        // handle form submit - TODO: hook this up to the backend later
+        function handleFormSubmit(e, successId, btnId) {
             e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            console.log("form submitted!"); // debug
+            
+            const btn = document.getElementById(btnId);
+            const originalText = btn.innerHTML;
+            
+            // show loading state
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
             btn.disabled = true;
             
-            // Simulate API call for the web development team to hook into
+            // fake API call delay
             setTimeout(() => {
-                document.getElementById('formSuccess').classList.remove('hidden');
-                e.target.reset();
-                btn.innerHTML = 'Submit Request';
+                document.getElementById(successId).classList.remove('hidden');
+                e.target.reset(); // clear form
+                btn.innerHTML = originalText;
                 btn.disabled = false;
-                setTimeout(() => document.getElementById('formSuccess').classList.add('hidden'), 5000);
+                
+                // hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById(successId).classList.add('hidden');
+                }, 5000);
             }, 1000);
         }
 
-        // Generate FAQs
+        // load all the FAQs from the brief
         const faqData = [
             { q: "Can medication completely relieve tooth pain?", a: "Not entirely. While medications may offer short-term relief, long-lasting relief requires identifying and treating the root cause of the pain through professional dental care." },
             { q: "Does teeth scaling cause enamel damage, sensitivity, or gaps between teeth?", a: "No. Scaling safely removes plaque and tartar. It doesn’t damage enamel or create gaps. Some temporary sensitivity may occur, but it usually subsides as gums heal." },
@@ -553,31 +783,33 @@
             { q: "How often should I see a dentist?", a: "Visiting your dentist every six months is recommended for routine check-ups and preventive care." }
         ];
 
+        // render them into the dom
         const faqContainer = document.getElementById('faq-container');
         faqData.forEach((faq, index) => {
             faqContainer.innerHTML += `
-                <div class="border border-gray-200 rounded-lg bg-white overflow-hidden">
-                    <button class="w-full text-left px-6 py-4 font-semibold text-gray-900 bg-gray-50 hover:bg-gray-100 flex justify-between items-center transition" onclick="toggleFaq(${index})">
+                <div class="bg-white overflow-hidden rounded-2xl border border-gray-100 shadow-sm transition hover:border-primaryLight">
+                    <button class="flex items-center justify-between w-full px-6 py-5 text-left font-bold text-gray-900 transition" onclick="toggleFaq(${index})">
                         <span>${faq.q}</span>
-                        <i class="fa-solid fa-chevron-down text-primary transition-transform" id="faq-icon-${index}"></i>
+                        <div class="p-2 rounded-full text-primary bg-surface"><i class="fa-solid fa-chevron-down transition-transform" id="faq-icon-${index}"></i></div>
                     </button>
-                    <div class="faq-answer px-6 py-4 text-gray-600 bg-white border-t border-gray-100" id="faq-answer-${index}">
+                    <div class="faq-answer px-6 pt-1 pb-5 bg-white text-sm text-gray-600 leading-relaxed border-t border-gray-50" id="faq-answer-${index}">
                         ${faq.a}
                     </div>
                 </div>
             `;
         });
 
+        // simple accordion toggle logic
         function toggleFaq(index) {
             const answer = document.getElementById(`faq-answer-${index}`);
             const icon = document.getElementById(`faq-icon-${index}`);
             const isOpen = answer.classList.contains('open');
             
-            // Close all
+            // first close all of them
             document.querySelectorAll('.faq-answer').forEach(el => el.classList.remove('open'));
             document.querySelectorAll('[id^="faq-icon-"]').forEach(el => el.style.transform = 'rotate(0deg)');
             
-            // Open clicked if it was closed
+            // open the one we clicked if it wasn't already open
             if (!isOpen) {
                 answer.classList.add('open');
                 icon.style.transform = 'rotate(180deg)';
